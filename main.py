@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import sys
 import os
+import configparser
 
 
 # --- setup
@@ -11,10 +12,42 @@ if not os.path.isfile('scanned_IDs.txt'):
     open('scanned_IDs.txt', 'x')
 
 
+
 # --- config
-prefix = 'rohee'  # should be 6 chars long max
+class Config(configparser.ConfigParser):
+    defaults = {
+        'prefix': 'rohee', 
+    }
+    config_fn = 'config.ini'
+
+    # placeholder for vars
+    prefix: str
+
+    def __init__(self):
+        super().__init__()
+        self.read(self.config_fn)
+
+        for i in self.defaults:
+            # set variables
+            setattr(self, i, self.get('main', i, fallback=self.defaults[i]))
+
+        # if config file is not existing create it
+        if not os.path.isfile(self.config_fn):
+            self.write()
+
+    def write(self):
+        # set values to write
+        self.add_section('main')
+        for i in self.defaults:
+            self.set('main', i, self.defaults[i])
+
+        with open(self.config_fn, 'w') as f:
+            super().write(f)
+
+
 
 # --- vars
+cfg = Config()
 id = ''
 url = 'https://prnt.sc/'
 headers = {
@@ -22,10 +55,11 @@ headers = {
 }
 
 
+
 # --- getting combinations
 charset = 'abcdefghijklmnopqrstuvwxyz0123456789'  # abcdefghijklmnopqrstuvwxyz0123456789
 combinations = []
-repeat = (6 - len(prefix)) - 1
+repeat = (6 - len(cfg.prefix)) - 1
 x = [char for char in charset]
 for loop in range(repeat):
     x = [y + char for char in charset for y in x]
@@ -51,7 +85,7 @@ percent_new = round(counter * 100 / c_max)
 percent_old = -1
 for suffix in combinations:
 
-    id = prefix + suffix
+    id = cfg.prefix + suffix
     if id not in scanned_IDs:
 
         percent_new = round(counter * 100 / c_max)
