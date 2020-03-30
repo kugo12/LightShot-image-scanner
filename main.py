@@ -1,23 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
-import keyboard
-import threading
 import sys
 import os
 
 
 # --- config
 prefix = 'rohe'  # should be 6 chars long max
-break_key = "x"  # breaks from scanning and downloading loops
 
 
 # --- vars
-key_pressed = False
-def on_x_pressed():
-    global key_pressed
-    while True:
-        if keyboard.read_key() == break_key:
-            key_pressed = True
 
 id = ''
 url = 'https://prnt.sc/'
@@ -47,12 +38,6 @@ except FileNotFoundError:
 
 
 
-# --- starting thread for breaking from the loops
-key_thread = threading.Thread(target=on_x_pressed)
-key_thread.daemon = True
-key_thread.start()
-
-
 # --- scanning sites
 id_list = []
 counter = 0
@@ -60,10 +45,6 @@ c_max = len(combinations)
 percent_new = round(counter * 100 / c_max)
 percent_old = -1
 for suffix in combinations:
-
-    if key_pressed:
-        key_pressed = False
-        break
 
     id = prefix + suffix
     if id not in scanned_IDs:
@@ -100,11 +81,6 @@ downloaded_images = []
 percent_old = -1
 try:
     for x in id_list:
-
-        if key_pressed:
-            download_interrupted = True
-            break
-
         percent_new = round(counter * 100 / c_max)
         if percent_new != percent_old:
             print(f'Downloading images: {percent_new}%')
