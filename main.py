@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import sys
 import os
 import configparser
+import signal
 
 
 # --- setup
@@ -11,6 +12,14 @@ if not os.path.isdir('data'):
 if not os.path.isfile('scanned_IDs.txt'):
     open('scanned_IDs.txt', 'x')
 
+def break_signal_handler(signal, frame):
+    try:
+        print('\nCtrl-c break')
+    except RuntimeError:
+        pass
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, break_signal_handler)
 
 
 # --- config
