@@ -1,3 +1,6 @@
+print("1.0.0")
+
+import lxml
 import requests
 from bs4 import BeautifulSoup
 import keyboard
