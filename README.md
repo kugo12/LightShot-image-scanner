@@ -1,6 +1,8 @@
 # LightShot-image-scanner
  Python script that looks for images on LightShot website and downloads them.
 
+**GUI version**  
+ https://www.dropbox.com/s/31a2o1grmpyo9y5/LS_Image_Scanner_GUI.rar?dl=1
 
 **Config**  
  prefix - first characters of image ID. Should be 4 characters minimum.  
