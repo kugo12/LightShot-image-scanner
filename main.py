@@ -4,11 +4,17 @@ import sys
 import os
 
 
+# --- setup
+if not os.path.isdir('data'):
+    os.mkdir('data')
+if not os.path.isfile('scanned_IDs.txt'):
+    open('scanned_IDs.txt', 'x')
+
+
 # --- config
-prefix = 'rohe'  # should be 6 chars long max
+prefix = 'rohee'  # should be 6 chars long max
 
 # --- vars
-
 id = ''
 url = 'https://prnt.sc/'
 headers = {
