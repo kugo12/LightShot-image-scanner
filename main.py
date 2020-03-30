@@ -35,11 +35,16 @@ for loop in range(repeat):
     x = [y + char for char in charset for y in x]
 combinations += x
 
-scanned_IDs = []
-with open('scanned_IDs.txt', 'r+') as f_scanned_IDs:
-    for line in f_scanned_IDs:
-        line = str(line).replace("\n", "")
-        scanned_IDs.append(line)
+try:
+    scanned_IDs = []
+    with open('scanned_IDs.txt', 'r+') as f_scanned_IDs:
+        for line in f_scanned_IDs:
+            line = str(line).replace("\n", "")
+            scanned_IDs.append(line)
+except FileNotFoundError:
+    print("Couldn't find \"scanned_IDs.txt\" file!")
+    os.system("pause")
+
 
 
 # --- starting thread for breaking from the loops
@@ -105,7 +110,7 @@ try:
             print(f'Downloading images: {percent_new}%')
             percent_old = percent_new
 
-        f = open(f'data\\{x[0]}.png', 'xb')
+        f = open(f'data/{x[0]}.png', 'xb')
         f.write(requests.get(x[1]).content)
         f.close()
 
