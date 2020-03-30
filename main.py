@@ -7,7 +7,6 @@ import os
 # --- config
 prefix = 'rohe'  # should be 6 chars long max
 
-
 # --- vars
 
 id = ''
@@ -34,7 +33,7 @@ try:
             scanned_IDs.append(line)
 except FileNotFoundError:
     print("Couldn't find \"scanned_IDs.txt\" file!")
-    os.system("pause")
+    sys.exit(1)
 
 
 
@@ -116,4 +115,4 @@ with open('scanned_IDs.txt', 'a') as f_scanned_IDs:
 
 # --- ending
 print("DONE!")
-os.system("pause")
+sys.exit(0)
