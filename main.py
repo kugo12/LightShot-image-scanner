@@ -62,17 +62,23 @@ url = 'https://prnt.sc/'
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
 }
+charset = 'abcdefghijklmnopqrstuvwxyz0123456789'
+repeat = (6 - len(cfg.prefix)) - 1
 
 
 
 # --- getting combinations
-charset = 'abcdefghijklmnopqrstuvwxyz0123456789'  # abcdefghijklmnopqrstuvwxyz0123456789
-combinations = []
-repeat = (6 - len(cfg.prefix)) - 1
-x = [char for char in charset]
-for loop in range(repeat):
-    x = [y + char for char in charset for y in x]
-combinations += x
+def combinations(repeat, first_loop=True):
+    if first_loop and repeat < 0:
+        yield ''
+    else:
+        if repeat == 0:
+            for char in charset:
+                yield char
+        else:
+            for char in charset:
+                for ch in combinations(repeat-1, False):
+                    yield char+ch
 
 try:
     scanned_IDs = []
@@ -83,17 +89,16 @@ try:
 except FileNotFoundError:
     print("Couldn't find \"scanned_IDs.txt\" file!")
     sys.exit(1)
-
+ 
 
 
 # --- scanning sites
 id_list = []
 counter = 0
-c_max = len(combinations)
+c_max = len(charset)**(6-len(cfg.prefix))
 percent_new = round(counter * 100 / c_max)
 percent_old = -1
-for suffix in combinations:
-
+for suffix in combinations(repeat):
     id = cfg.prefix + suffix
     if id not in scanned_IDs:
 
